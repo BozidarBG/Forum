@@ -1,0 +1,4 @@
+composer require cviebrock/eloquent-sluggable:^4.6
+hashid
+
+Croppie

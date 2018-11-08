@@ -1,0 +1,30 @@
+.right-column{
+
+}
+.left-column, .middle-column, .right-column{
+    padding-top: 20px;
+}
+
+.question-image{
+    width: 50%;
+    vertical-align: middle;
+    margin: 10px auto;
+}
+
+.media img{
+    width: 50px;
+}
+
+.question-text{
+    color:#004085;
+}
+.question-text:hover{
+    text-decoration: none;
+    color: #005cbf;
+}
+.search{
+    width:500px;
+}
+/*.form-group{*/
+    /*width: 500px !important;*/
+/*}*/
