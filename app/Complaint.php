@@ -12,10 +12,12 @@ class Complaint extends Model
     protected $fillable=['body', 'complained_to','complained_by', 'link'];
 
     public function getReportedUser(){
-        return User::whereId($this->complained_to)->first()->name;
+        return User::whereId($this->complained_to)->first();
     }
 
     public function getUserWhoComplained(){
-        return User::whereId($this->complained_by)->first()->name;
+        return User::whereId($this->complained_by)->first();
     }
+
+
 }

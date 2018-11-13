@@ -107,8 +107,31 @@ class ProfileController extends Controller
 
     }
 
-    public function destroy($id)
+    public function deleteProfile(Request $request)
     {
-        //
+        $user=Auth::user();
+        $user->profile->delete();
+        $user->likes()->delete();
+        $user->likereplies()->delete();
+        $user->replies()->delete();
+        $user->questions()->delete();
+        $image = isset($user->avatar) ? $user->avatar : null;
+
+        if ($image) {
+            $path = parse_url($user->avatar);
+            File::delete(public_path($path['path']));
+        }
+        $user->complaints()->delete();
+        $user->delete();
+
+        return response()->json('success');
+        //del row in the table user
+        //del row in profile
+        //del picture in folder
+        //del questions if any
+        //del like questions if any
+        //del replies if any
+        //del like replies if any
+
     }
 }

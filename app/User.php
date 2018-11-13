@@ -58,4 +58,8 @@ class User extends Authenticatable
     public function likereplies(){
         return $this->hasMany(Likereply::class);
     }
+
+    public function complaints(){
+        return $this->hasMany(Complaint::class, 'complained_by');
+    }
 }

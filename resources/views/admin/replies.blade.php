@@ -15,7 +15,7 @@
     </style>
 @endsection
 @section('content')
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header">
             <h6>All replies</h6>
             {!! csrf_field() !!}
@@ -56,6 +56,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="text-center">
+        {!! $replies->links() !!}
     </div>
 @endsection
 @section('scripts')

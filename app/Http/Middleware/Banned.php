@@ -20,7 +20,7 @@ class Banned
     public function handle($request, Closure $next)
     {
         $user=Auth::user();
-        Log::info($user);
+
         if($user->banned){
             //check if ban has expired
             if($user->banned_until < Carbon::now()){

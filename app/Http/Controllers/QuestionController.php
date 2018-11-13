@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Like;
@@ -17,7 +18,7 @@ class QuestionController extends Controller
 
     public function create()
     {
-        return view('questions.create');
+        return view('questions.create')->with('tags', Tag::all());
     }
 
     /**
@@ -41,9 +42,7 @@ class QuestionController extends Controller
 
 
         $question->save();
-        for($i=0; $i<count($request->tags); $i++){
-            $question->tags()->attach($request->tags[$i]);
-        }
+        $question->tags()->attach($request->tags);
         Session::flash('success', 'Question saved successfully!');
         return redirect()->route('home');
     }

@@ -112,6 +112,37 @@ Route::group(['middleware'=>['auth', 'banned']], function(){
             'uses'=>'AdminController@complaints',
             'as'=>'admin.complaints'
         ]);
+        Route::post('admin-complaint-delete/{complaint}', [
+            'uses'=>'AdminController@deleteComplaint',
+            'as'=>'admin.complaint.delete'
+        ]);
+        //CRUD for sponsors
+        Route::get('admin-sponsors', [
+            'uses'=>'SponsorController@index',
+            'as'=>'admin.sponsors'
+        ]);
+        Route::get('admin-sponsors-create', [
+            'uses'=>'SponsorController@create',
+            'as'=>'admin.sponsors.create'
+        ]);
+        Route::post('admin-sponsors-store', [
+            'uses'=>'SponsorController@store',
+            'as'=>'admin.sponsors.store'
+        ]);
+
+        Route::get('admin-sponsors-edit/{sponsor}', [
+            'uses'=>'SponsorController@edit',
+            'as'=>'admin.sponsors.edit'
+        ]);
+        Route::post('admin-sponsors-update', [
+            'uses'=>'SponsorController@update',
+            'as'=>'admin.sponsors.update'
+        ]);
+        Route::post('admin-sponsors-delete', [
+            'uses'=>'SponsorController@destroy',
+            'as'=>'admin.sponsors.delete'
+        ]);
+
 //Users
 
     });//end middleware admin
@@ -134,6 +165,11 @@ Route::group(['middleware'=>['auth', 'banned']], function(){
     Route::post('update-profile',[
         'uses'=>'ProfileController@updateProfile',
         'as'=>'update.profile'
+    ]);
+
+    Route::post('user-delete-profile',[
+        'uses'=>'ProfileController@deleteProfile',
+        'as'=>'user.delete.profile'
     ]);
 
     //aks questions if you are authenticated
@@ -180,10 +216,16 @@ Route::group(['middleware'=>['auth', 'banned']], function(){
 
 });
 
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')
+    ->where('provider','twitter|facebook|linkedin|google|github|bitbucket')
+    ->name('social.login');
 
-Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')
+    ->where('provider','twitter|facebook|linkedin|google|github|bitbucket');
 
-Route::get('/login/{social}/callback','Auth\LoginController@handleProviderCallback')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
+//Route::get('/login/{social}','Auth\LoginController@socialLogin')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
+
+//Route::get('/login/{social}/callback','Auth\LoginController@handleProviderCallback')->where('social','twitter|facebook|linkedin|google|github|bitbucket');
 
 Route::get('/{slug}', [
     'uses'=>'FrontendController@showTag',

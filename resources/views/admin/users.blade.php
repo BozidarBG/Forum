@@ -23,7 +23,7 @@
                             <th>Registered</th>
                             <th>Action</th>
 
-                            <th>Banned</th>
+                            <th>Banned untill</th>
                         </tr>
                         </thead>
 
@@ -38,7 +38,7 @@
                                         <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Ban user
                                         </button>
-                                        <div class="dropdown-menu" data-id="{{$user->id}}">
+                                        <div class="dropdown-menu" data-id="{{$user->id}}" data-name="{{$user->name}}">
                                             @if($user->banned)
                                                 <a href="#" class="dropdown-item confirm-modal" data-time="0">Remove ban</a>
                                             @else
@@ -70,7 +70,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success" type="submit" name="submit" id="send" data-id="">Change</button>
+                        <button class="btn btn-success" type="submit" name="submit" id="send">Change</button>
                         <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -80,60 +80,5 @@
     </div>
 @endsection
 @section('scripts')
-    <script>
-
-        let token=$('input[name=_token]').val();
-        let data={};
-        data._token=token;
-
-            //if we click ok, modal should appear to confirm if we want to take this action
-            $('.confirm-modal').on('click', function (){
-                let time=$(event.target).attr('data-time');
-                let text;
-
-                let name=$(event.target).parent().parent().parent().prev().prev().text();
-                let id=$(event.target).parent().attr('data-id');
-                if(time==10){
-                    text="Are you sure that you want to ban "+name+" forever?";
-                }else if(time==0){
-                    text="Are you sure that you want to  remove ban for "+name+"?";
-                }else{
-                    text="Are you sure that you want to ban "+name+" for "+time+" days?";
-                }
-                $('#confirmModal').modal('show');
-                $('#confirmModal .modal-header span').text(text);
-                //if we click send, we will take id of that user and ban time and send it on server
-                data.time=time;
-                data.id=id;
-                $('#send').on('click', function(){
-                    $.ajax({
-                        url:"/admin-ban",
-                        method:'post',
-                        data:data,
-                        dataType:'json',
-                        success:function(data){
-                            console.log(data)
-                            if(data.success){
-                                toastr.success(data.success);
-                                $('#confirmModal').modal('hide');
-                                setTimeout(function(){
-                                    location.reload();
-                                }, 1500);
-
-
-                            }else{
-                                toastr.success(data.error);
-                                $('#confirmModal').modal('hide');
-                            }
-                        }
-                    });
-
-                });
-
-            });
-
-
-//        });//end click ban user
-
-    </script>
+    <script src="{{asset('js/ban-user.js')}}"></script>
 @endsection

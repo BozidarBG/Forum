@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <p>&nbsp;</p>
-                        <h5 class="card-title text-center">Change Avatar</h5>
+
                         <div class="profile-img p-3 text-center">
                             <img src="{{asset($user->getAvatar())}}" id="profile-pic">
 
@@ -45,6 +45,9 @@
                                        name="profile_picture" accept="image/*">
                                 Upload New Photo
                             </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a class="btn btn-danger" id="delete-profile-btn" href="#">Delete profile</a>
                         </div>
                             <!-- The Modal -->
                             <div class="modal" id="myModal">
@@ -69,7 +72,23 @@
                                     </div>
                                 </div>
                             </div>
-
+                        <!--confirm modal-->
+                        <div class="modal fade" id="confirmModal" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <span>Are you sure that you want to delete your profile?<br>
+                                        This action can not be undone!
+                                        </span>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-danger" id="delete-profile">Delete profile</button>
+                                        <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
                     </div>
@@ -235,6 +254,29 @@
                 setTimeout(function() { croppie.destroy(); }, 100);
             })
 
+        });
+
+        //Delete profile
+        $('#delete-profile-btn').on('click', function(){
+            $('#confirmModal').modal('show');
+            $('#delete-profile').on('click', function(){
+                //user has confirmed and we send ajax request to server to delete profile
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('input[name=_token]').val()
+                    }
+                });
+                $.ajax({
+                    url:'/user-delete-profile',
+                    method: 'POST',
+                    dataType:'json',
+                    success:function(data){
+                        if(data=="success"){
+                        location.href="/";
+                        }
+                    }
+                });
+            });
         });
 
     </script>

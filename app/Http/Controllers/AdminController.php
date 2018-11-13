@@ -8,7 +8,7 @@ use App\Complaint;
 use App\Reply;
 use App\User;
 use Illuminate\Support\Carbon;
-use Log as log;
+use Session;
 
 
 class AdminController extends Controller
@@ -16,14 +16,14 @@ class AdminController extends Controller
     public function dashboard(){
 
         return view('admin.dashboard')
-            ->with('users', User::orderBy('created_at', 'desc')->take(2)->get())
-            ->with('questions', Question::orderBy('created_at', 'desc')->take(2)->get())
-            ->with('complaints', Complaint::orderBy('created_at', 'desc')->take(2)->get());
+            ->with('users', User::orderBy('created_at', 'desc')->take(5)->get())
+            ->with('questions', Question::orderBy('created_at', 'desc')->take(5)->get())
+            ->with('complaints', Complaint::orderBy('created_at', 'desc')->take(5)->get());
     }
 
     //displays all questions to check if they comply with rules
     public function questions(){
-        return view('admin.questions')->with('questions', Question::orderBy('id', 'desc')->get());
+        return view('admin.questions')->with('questions', Question::orderBy('id', 'desc')->paginate(15));
     }
 
     //admin can delete question if it doesn't comply with rules
@@ -47,7 +47,7 @@ class AdminController extends Controller
 
     //displays all replies to check if they comply with rules
     public function replies(){
-        return view('admin.replies')->with('replies', Reply::orderBy('id','desc')->get());
+        return view('admin.replies')->with('replies', Reply::orderBy('id','desc')->paginate(15));
     }
 
     //admin can delete reply if it doesn't comply with rules
@@ -63,6 +63,17 @@ class AdminController extends Controller
         return view('admin.complaints')->with('complaints', Complaint::orderBy('created_at', 'desc')->paginate(10));
     }
 
+    public function deleteComplaint(Request $request, Complaint $complaint){
+
+        if($complaint->delete()){
+            Session::flash('success', 'Complaint deleted!');
+            return redirect()->back();
+        }else{
+            Session::flash('error', 'Complaint deleted!');
+            return redirect()->back();
+        }
+    }
+
     public function users(){
         return view('admin.users')->with('users', User::where('admin', '!=', 1)->orderBy('created_at', 'desc')->paginate(10));
     }
@@ -74,6 +85,11 @@ class AdminController extends Controller
             'time'=>'required'
         ]);
         $user=User::find($request->id);
+
+        //we can't ban admin
+        if($user->isAdmin()){
+            return response()->json(['error'=> 'You can\'t ban admins!']);
+        }
 
         if($user){
             //if time ==0 unban user, else ban it for given time

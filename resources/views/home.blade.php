@@ -17,11 +17,11 @@
         <div class="card mb-4">
             <div class="card-header">
                 <div class="media">
-                    <img class="mr-3" src="{{$question->user->getAvatar()}}" alt="user-image">
+                    <a href="{{route('show.user',['hashid'=>$question->user->hashid])}}"><img class="mr-3" src="{{$question->user->getAvatar()}}" alt="user-image"></a>
                     <div class="media-body">
-                        <a href="#" class="question-text mt-0 mb-1">
-                            {{$question->user->name}} has asked:
-                        </a>
+                        <a href="{{route('show.user',['hashid'=>$question->user->hashid])}}" class="question-text mt-0 mb-1">
+                            {{$question->user->name}}</a> has asked:
+
                         <br>
                         <a href="{{route('question.show',['slug'=>$question->slug])}}" class="question-text mt-1 mb-1">
                             {{$question->title}}

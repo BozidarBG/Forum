@@ -81,14 +81,22 @@
                 <a class="list-group-item {{Route::current()->uri === 'my-profile' || Route::current()->uri === 'edit-profile' ? 'active' : ''}}" href="{{route('my.profile')}}">My profile</a>
                 @endauth
             </div>
+            <div >
+                <h5 class="text-center mt-3">Our Sponsors</h5>
+                @foreach($sponsors as $sponsor)
+                    <div class=" card p-1 mb-2 text-center ">
+                        <a href="{{$sponsor->link}}" target="_blank"><img src="{{asset($sponsor->banner)}}" alt="{{$sponsor->name}}" width="100%"></a>
+                    </div>
+                @endforeach
+            </div>
         </div>
 @yield('content')
     </div>
 
 </div>
 <footer class="container-fluid bg-dark mb-0 pb-0">
-    <p>&copy; Company 2017-2018</p>
-    <p class="p-2">ovde su neka sranja</p>
+    <p class="py-4 mb-0 text-center text-white">&copy; All rights reserved 2017-2018</p>
+
 </footer>
 
 
@@ -99,9 +107,13 @@
         <div class="modal-content">
             <form method="post" id="register_form">
                 <div class="modal-header">
-                    <h4 class="modal-title">Please register</h4>
+                    <h4 class="modal-title">Please register or</h4>
+
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
+                </div>
+                <div class="modal-header">
+                    @include('socials')
                 </div>
                 <div class="modal-body">
                     {{csrf_field()}}
@@ -124,6 +136,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+
                     <input type="submit" name="submit" id="register" value="Register" class="btn btn-info">
                     <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
                 </div>
@@ -138,9 +151,12 @@
         <div class="modal-content">
             <form method="post" id="login_form">
                 <div class="modal-header">
-                    <h4 class="modal-title">Please enter your login info</h4>
+                    <h4 class="modal-title">Please enter your login info or</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
 
+                </div>
+                <div class="modal-header">
+                    @include('socials')
                 </div>
                 <div class="modal-body" id="login-body">
                     {{csrf_field()}}
@@ -172,6 +188,7 @@
 
                 </div>
                 <div class="modal-footer">
+                    @include('socials')
                     <input type="submit" name="submit" id="login" value="Login" class="btn btn-info">
                     <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
                 </div>

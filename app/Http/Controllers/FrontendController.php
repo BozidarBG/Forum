@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Sponsor;
 use App\Tag;
 use App\User;
 use App\Question;
@@ -10,12 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
+
 class FrontendController extends Controller
 {
     public function index(){
 
         return view('home')
-            ->with('questions', Question::orderBy('created_at', 'desc')->paginate(10));
+            ->with('questions', Question::orderBy('created_at', 'desc')->paginate(10))
+            ->with('sponsors', Sponsor::orderBy('position', 'asc')->get());
     }
 
     protected function paginate(Collection $collection){
@@ -23,7 +26,7 @@ class FrontendController extends Controller
         //page je current page a LengthAwarePaginator je iz Illuminate\Pagination i koristi metodu resolveCurrentPage
         $page=LengthAwarePaginator::resolveCurrentPage();
 
-        $perPage=2;
+        $perPage=10;
 
         //od kog elementa slajsujemo i koliko komada
         //index počinje od nula... ako smo na prvoj stranici, page-1=0 * 0 =0 znači od 0 do 15-tog člana (bez rbr.15)
@@ -87,7 +90,7 @@ class FrontendController extends Controller
         }
 
     }
-
+//view one question
     public function question($slug){
         $question=Question::with('replies')->where('slug', $slug)->first();
         if(!$question){

@@ -8,6 +8,9 @@
         color:#4e555b;
         text-decoration: none;
     }
+    a.like:hover, a.likeReply:hover{
+        text-decoration:underline;
+    }
 
 </style>
 @endsection
@@ -18,7 +21,7 @@
         <div class="card border-info">
             <div class="card-header bg-info">
                 <a href="{{route('show.user', ['hashid'=>$question->user->hashid])}}"><img class="mr-3" src="{{asset($question->user->getAvatar())}}" alt="user-image" width="50px"></a>
-                <a href="{{route('show.user', ['hashid'=>$question->user->hashid])}}">{{$question->user->name}}</a> has asked:
+                <a href="{{route('show.user', ['hashid'=>$question->user->hashid])}}">{{$question->user->name}}</a> has asked on {{$question->showCreated(true)}}:
                 <div class="float-right">
                     {!! csrf_field() !!}
                     @auth
@@ -26,40 +29,40 @@
                     @endauth
                     <input type="hidden" id="question_id" value="{{$question->id}}">
                     @if($question->is_liked_by_auth_user())
-                        <button class="btn btn-danger like">Unlike <span class="badge badge-light">{{$question->likes->count()}}</span></button>
+                        <a href="#" class="text-danger like">Unlike <i class="far fa-thumbs-down"></i><span class="badge badge-light">{{$question->likes->count()}}</span></a>
                     @else
-                        <button class="btn btn-success like">Like <span class="badge badge-light">{{$question->likes->count()}}</span></button>
+                        <a href="#" class="text-white like">Like <i class="far fa-thumbs-up"></i><span class="badge badge-light">{{$question->likes->count()}}</span></a>
                     @endif
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body py-0">
                 <h3>{{$question->title}}</h3>
                 {!! $question->content !!}
             </div>
         </div>
         @if($question->replies->count()>0)
-        <h4 class=" m-2">
+        <h5 class="m-2">
             Replies:
-        </h4>
+        </h5>
         @foreach($question->replies as $reply)
         <div class="card-body ">
             <div class="card border-warning m-1">
                 <div class="card-header bg-warning">
                     <a href="{{route('show.user', ['hashid'=>$reply->user->hashid])}}"><img class="mr-3" src="{{asset($reply->user->getAvatar())}}" alt="user-image" width="50px"></a>
-                    <a href="{{route('show.user', ['hashid'=>$reply->user->hashid])}}">{{$reply->user->name}}</a> has replied:
+                    <a href="{{route('show.user', ['hashid'=>$reply->user->hashid])}}">{{$reply->user->name}}</a> has replied on {{$reply->showCreated(true)}}:
                     <div class="float-right">
                         {!! csrf_field() !!}
                         @auth
                         <button class="btn btn-primary start-report-modal" data-hashid="{{$reply->user->hashid}}">Report User</button>
                         @endauth
                         @if($reply->is_liked_by_auth_user())
-                            <button class="btn btn-danger likeReply" data-id="{{$reply->id}}">Unlike <span class="badge badge-light">{{$reply->likes->count()}}</span></button>
+                            <a href="" class="text-danger likeReply" data-id="{{$reply->id}}">Unlike <i class="far fa-thumbs-down"></i><span class="badge badge-light">{{$reply->likes->count()}}</span></a>
                         @else
-                            <button class="btn btn-success likeReply" data-id="{{$reply->id}}">Like <span class="badge badge-light">{{$reply->likes->count()}}</span></button>
+                            <a href="" class="text-white likeReply" data-id="{{$reply->id}}">Like <i class="far fa-thumbs-up"></i><span class="badge badge-light">{{$reply->likes->count()}}</span></a>
                         @endif
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body py-0">
                     {!! $reply->content !!}
                 </div>
             </div>
@@ -150,9 +153,10 @@
     let hashid;
 
 //like/unlike question
-        $('.like').on('click', function(){
+        $('.like').on('click', function(event){
             let btn=event.target;
             let id=$('#question_id').val();
+            //console.log(id);
             $.ajax({
                 url:'/question/like/'+id,
                 method:'post',
@@ -163,14 +167,14 @@
                     if(data[0]=="liked"){
 
                         //change button to unlike and give it new count
-                        let html="Unlike <span class='badge badge-light'>"+data[1]+"</span>";
-                        $(btn).removeClass('btn-success like').addClass('btn-danger').html(html);
+                        let html="Unlike <i class='far fa-thumbs-down'></i><span class='badge badge-light'>"+data[1]+"</span>";
+                        $(btn).removeClass('text-white like').addClass('text-danger').html(html);
 
 
                     }else if(data[0]=="unliked") {
                         //change button to like and give it new count
-                        let html="Like <span class='badge badge-light'>"+data[1]+"</span>"
-                        $(btn).removeClass('btn-danger unlike').addClass('btn-success like').html(html);
+                        let html="Like <i class='far fa-thumbs-up'></i><span class='badge badge-light'>"+data[1]+"</span>"
+                        $(btn).removeClass('text-danger unlike').addClass('text-white like').html(html);
                     }else{
                         toastr.error('Ooops there was some error');
                     }
@@ -192,13 +196,13 @@
                 if(data[0]=="liked"){
 
                     //change button to unlike and give it new count
-                    let html="Unlike <span class='badge badge-light'>"+data[1]+"</span>";
-                    $(btn).removeClass('btn-success like').addClass('btn-danger').html(html);
+                    let html="Unlike <i class='far fa-thumbs-down'></i><span class='badge badge-light'>"+data[1]+"</span>";
+                    $(btn).removeClass('text-white like').addClass('text-danger').html(html);
 
                 }else if(data[0]=="unliked") {
                     //change button to like and give it new count
-                    let html="Like <span class='badge badge-light'>"+data[1]+"</span>"
-                    $(btn).removeClass('btn-danger unlike').addClass('btn-success like').html(html);
+                    let html="Like <i class='far fa-thumbs-up'></i><span class='badge badge-light'>"+data[1]+"</span>"
+                    $(btn).removeClass('text-danger unlike').addClass('text-white like').html(html);
                 }else{
                     toastr.error('Ooops there was some error');
                 }

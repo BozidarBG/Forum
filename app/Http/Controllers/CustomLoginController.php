@@ -21,7 +21,7 @@ class CustomLoginController extends Controller
 
     public function loginUser(Request $request)
     {
-        \Log::warning($request->toArray());
+        ///\Log::warning($request->toArray());
         $email = $request->email;
         $password = $request->password;
         $rememberToken = $request->remember;
@@ -34,7 +34,7 @@ class CustomLoginController extends Controller
         if ($user->password=== Hash::make($password)) {
 
             Auth::login($user);
-            \Log::warning($user);
+            //\Log::warning($user);
             $msg = [
                 'status' => 'success',
                 'message' => 'Login successful'

@@ -22,7 +22,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->smallInteger('admin')->default(false);
-            $table->bigInteger('points')->default(50);
             $table->smallInteger('banned')->default('0');
             $table->timestamp('banned_until')->nullable();
             $table->rememberToken();

@@ -91,6 +91,13 @@
                 <i class="fas fa-fw fa-table"></i>
                 <span>Tags</span></a>
         </li>
+        <li class="nav-item {{Route::current()->uri === 'admin-sponsors' ||
+        Route::current()->uri === 'admin-sponsors-create' ||
+        Route::current()->uri === 'admin-sponsors-edit' ? 'active' : ''}}">
+            <a class="nav-link" href="{{route('admin.sponsors')}}">
+                <i class="fas fa-euro-sign"></i>
+                <span>Sponsors</span></a>
+        </li>
 
     </ul>
 

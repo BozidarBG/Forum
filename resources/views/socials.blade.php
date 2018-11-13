@@ -1,0 +1,1 @@
+<a href="{{route('social.login', ['provider'=>'facebook'])}}" class="btn btn-outline-primary">Login with Facebook</a>

@@ -1,6 +1,27 @@
 @extends('layouts.frontend')
 @section('styles')
+    <style type="text/css">
+        .nounderline, .violet{
+            color: #7c4dff !important;
+        }
+        .btn-dark {
+            background-color: #7c4dff !important;
+            border-color: #7c4dff !important;
+        }
+        .btn-dark .file-upload {
+            width: 100%;
+            padding: 10px 0px;
+            position: absolute;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .profile-img img{
+            width: 200px;
+            height: 200px;
 
+        }
+    </style>
 @endsection
 @section('content')
     <div class="col-md-10 mt-5">
@@ -11,8 +32,12 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <img src="{{asset($user->getAvatar())}}" width="200px">
-                        <p class="mt-3">Member since {{$user->profile->showCreated()}}</p>
+                        <div class="profile-img p-3 text-center">
+                            <p>&nbsp;</p>
+                            <img src="{{asset($user->getAvatar())}}">
+                            <p class="mt-3">Member since {{$user->profile->showCreated()}}</p>
+                        </div>
+
                         @auth
                         @if(Auth::id() == $user->id)
                         <a href="{{route('edit.profile')}}" class="btn btn-outline-primary">Edit profile</a>
