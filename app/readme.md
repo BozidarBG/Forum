@@ -35,6 +35,7 @@ Dependencies:
 <br/>    - hashids: https://github.com/ivanakimov/hashids.php#readme
 <br/>    - slug: cviebrock/eloquent-sluggable:^4.6
 <br/>    - toastr: yoeunes/toastr
+<br/>    - Cropie
 <br/>    - CKEeditor
 
 You can see it live on https://bozidar-forum.000webhostapp.com/. I have left debug=>true to see the errors.
