@@ -188,7 +188,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    @include('socials')
+
                     <input type="submit" name="submit" id="login" value="Login" class="btn btn-info">
                     <button class="btn btn-default" type="button" data-dismiss="modal">Close</button>
                 </div>

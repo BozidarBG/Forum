@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Question;
 use Illuminate\Http\Request;
 use App\User;
 use Auth;
 use App\Profile;
 use Illuminate\Support\Facades\Session;
 use Validator;
-use Log;
+use App\Reply;
 use File;
+use Debugbar;
 
 class ProfileController extends Controller
 {
@@ -20,12 +22,25 @@ class ProfileController extends Controller
 
     public function showMyProfile()
     {
-        return view('profile')->with('user', Auth::user());
+        $user=Auth::user();
+        return view('profile')
+            ->with('user', $user)
+            ->with('questions', Question::where('user_id', $user->id)->get())
+            ->with('replies', Reply::with('question')->where('user_id', $user->id)->get()
+            );
     }
 
     public function showUser($hashid)
     {
-        return view('profile')->with('user', User::where('hashid', $hashid)->first());
+        $user=User::where('hashid', $hashid)->first();
+        if(!$user){
+            return redirect()->back();
+        }
+        return view('profile')
+            ->with('user', $user)
+            ->with('questions', Question::where('user_id', $user->id)->get())
+            ->with('replies', Reply::with('question')->where('user_id', $user->id)->get()
+            );
     }
 
 

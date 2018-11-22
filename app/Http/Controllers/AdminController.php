@@ -17,13 +17,13 @@ class AdminController extends Controller
 
         return view('admin.dashboard')
             ->with('users', User::orderBy('created_at', 'desc')->take(5)->get())
-            ->with('questions', Question::orderBy('created_at', 'desc')->take(5)->get())
-            ->with('complaints', Complaint::orderBy('created_at', 'desc')->take(5)->get());
+            ->with('questions', Question::with('user')->orderBy('created_at', 'desc')->take(5)->get())
+            ->with('complaints', Complaint::with('user')->orderBy('created_at', 'desc')->take(5)->get());
     }
 
     //displays all questions to check if they comply with rules
     public function questions(){
-        return view('admin.questions')->with('questions', Question::orderBy('id', 'desc')->paginate(15));
+        return view('admin.questions')->with('questions', Question::with('user')->orderBy('id', 'desc')->paginate(15));
     }
 
     //admin can delete question if it doesn't comply with rules
@@ -47,7 +47,7 @@ class AdminController extends Controller
 
     //displays all replies to check if they comply with rules
     public function replies(){
-        return view('admin.replies')->with('replies', Reply::orderBy('id','desc')->paginate(15));
+        return view('admin.replies')->with('replies', Reply::with('user', 'question')->orderBy('id','desc')->paginate(15));
     }
 
     //admin can delete reply if it doesn't comply with rules

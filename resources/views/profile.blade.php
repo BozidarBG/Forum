@@ -70,8 +70,8 @@
                         </ul>
                         <div class="tab-content m-2" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                @if($user->questions)
-                                    @foreach($user->questions as $question)
+                                @if($questions)
+                                    @foreach($questions as $question)
                                         <p><a href="{{route('question.show',['slug'=>$question->slug])}}">{{$question->title}}</a></p>
                                         @endforeach
                                     @else
@@ -79,8 +79,8 @@
                                 @endif
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                @if($user->replies)
-                                    @foreach($user->replies as $reply)
+                                @if($replies)
+                                    @foreach($replies as $reply)
                                         <p><a href="{{route('question.show',['slug'=>$reply->question->slug])}}">{!! $reply->shortenText($reply->content, 10) !!}</a></p>
                                     @endforeach
                                 @else

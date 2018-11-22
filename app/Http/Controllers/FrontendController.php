@@ -6,7 +6,7 @@ use App\Sponsor;
 use App\Tag;
 use App\User;
 use App\Question;
-
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -17,8 +17,7 @@ class FrontendController extends Controller
     public function index(){
 
         return view('home')
-            ->with('questions', Question::orderBy('created_at', 'desc')->paginate(10))
-            ->with('sponsors', Sponsor::orderBy('position', 'asc')->get());
+            ->with('questions', Question::with('user', 'likes','replies','tags')->orderBy('created_at', 'desc')->paginate(10));
     }
 
     protected function paginate(Collection $collection){
@@ -92,7 +91,7 @@ class FrontendController extends Controller
     }
 //view one question
     public function question($slug){
-        $question=Question::with('replies')->where('slug', $slug)->first();
+        $question=Question::with('replies.user', 'replies.likes', 'likes','user')->where('slug', $slug)->first();
         if(!$question){
             return redirect()->back();
         }
@@ -102,11 +101,14 @@ class FrontendController extends Controller
     }
 
     public function tags(){
-        return view('tags')->with('tags', Tag::orderBy('title', 'asc')->paginate(12));
+        $tags=Cache::remember('tags', 1440, function(){
+            return Tag::orderBy('title', 'asc')->paginate(12);
+        } );
+        return view('tags')->with('tags', $tags);
     }
 
     public function users(){
-        return view('users')->with('users', User::orderBy('name', 'asc')->paginate(12));
+        return view('users')->with('users', User::with('profile')->orderBy('name', 'asc')->paginate(12));
     }
 
 

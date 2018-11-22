@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use View;
 use App\Sponsor;
-
+use Illuminate\Support\Facades\Cache;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -20,7 +20,10 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Schema::defaultStringLength(191);
-        View::share('sponsors', Sponsor::orderBy('position', 'asc')->get());
+        $sponsors=Cache::remember('sponsors', 720, function(){
+            return Sponsor::orderBy('position', 'asc')->get();
+        });
+        View::share('sponsors', $sponsors);
     }
 
     /**
